@@ -39,7 +39,8 @@ def menuPrint():
 
 def getRandomWord():
     import random
-    words = ["hang", "pretty", "apple", "ant", "water", "samsung", "MCdonalds", "fluent", "voca", "galaxy"]
+    words = ["hang", "pretty", "apple", "ant", "water", "samsung", "MCdonalds", "f8514luent", "voca", "galaxy"]
+    ?}{'p;liukmnjyhbg'}
     return words[random.randrange(0, len(words))]
 
 
@@ -73,6 +74,8 @@ def runHangMan():
 
         if word.find(alphabet) != -1:
             print("CORRECT!")
+            print("alive")
+            break
         else:
             chance = chance -1
             print("LEFT CHANCE :", chance)
