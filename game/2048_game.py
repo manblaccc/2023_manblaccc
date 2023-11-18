@@ -85,4 +85,4 @@ def run2048():
         setEventListener()
         drawDisplay()
     pygame.quit()
-run2048()x
+run2048()
