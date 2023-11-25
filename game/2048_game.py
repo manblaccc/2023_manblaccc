@@ -1,4 +1,5 @@
 import pygame
+import random
 
 # 색상 dictionary
 colors = {
@@ -19,10 +20,12 @@ colors = {
 }
 
 # 실제 게임 로직이 반영될 보드
-board = [[-1, -1, -1, -1],
-          [-1, -1, -1, -1],
-          [-1, -1, -1, -1],
-          [-1, -1, -1, -1]]
+board = [
+    [-1, -1, -1, -1],
+    [-1, -1, -1, -1],
+    [-1, -1, -1, -1],
+    [-1, -1, -1, -1]
+]
 
 # 화면 관련 설정
 size = (500, 500)
@@ -31,34 +34,64 @@ screen = pygame.display.set_mode(size)
 # 게임 진행 flag 변수
 isGameRunning = True
 
+
 def initScreen():
     screen.fill(colors['white'])
     pygame.display.update()
 
+
+def addNewBlock():
+    canSet = False
+    while not canSet:
+        randomX = random.randint(0, 3)
+        randomY = random.randint(0, 3)
+        if board[randomX][randomY] == -1:
+            canSet = True
+
+    board[randomX][randomY] = 2 if random.randint(1, 10) < 10 else 4
+    # 10분의 1 확률로 4, 이외에는 2가 추가되도록
+
+
 def setEventListener():
     global isGameRunning
+    derection = 'up'
     for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            isGameRunning = False
+            return
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_q:
                 isGameRunning = False
-            elif event == pygame.K_DOWN:
+                return
+            elif event.key == pygame.K_DOWN:
                 print("아래")
-            elif event == pygame.K_UP:
+                derection = 'down'
+            elif event.key == pygame.K_UP:
                 print("위")
-            elif event == pygame.K_RIGHT:
+                derection = 'up'
+            elif event.key == pygame.K_RIGHT:
                 print("오른쪽")
-            elif event == pygame.K_LEFT:
+                derection = 'right'
+            elif event.key == pygame.K_LEFT:
                 print("왼쪽")
+                derection = 'left'
+            addNewBlock()
+
+
+
+
+
+
+
 
 def drawDisplay():
     global screen
-
     baseX = 35
     baseY = 35
     blockHeight = 100
     blockWidth = 100
     margin = 10
-
+    font = pygame.font.Font(None, 36)  # 폰트 크기 설정
     for i in range(4):
         for j in range(4):
             x = (blockWidth + margin) * j + baseX
@@ -68,18 +101,20 @@ def drawDisplay():
                 pygame.draw.rect(screen, colors[data], [x, y, blockWidth, blockHeight], 2)  # outlined rect
             else:
                 pygame.draw.rect(screen, colors[data], [x, y, blockWidth, blockHeight])  # filled rect
+                text = font.render(data, True, colors['black'])
+                screen.blit(text, (x + blockWidth // 2 - text.get_width() // 2, y + blockHeight // 2 - text.get_height() // 2))
 
     pygame.display.flip()  # 화면 다시그리기
+
 
 def run2048():
     pygame.init()
     initScreen()
     print("2048 게임 시작")
-
     while isGameRunning:
         setEventListener()
         drawDisplay()
-
     pygame.quit()
+
 
 run2048()
